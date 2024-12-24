@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Building Slideshow</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    #building-img {
+      width: 400px;
+      height: 300px;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border: 2px solid #333;
+    }
+    #speedValue {
+      font-weight: bold;
+    }
+    .range-label {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Slideshow of Buildings</h1>
+  
+  <!-- The image element that will display our building photos -->
+  <img id="building-img" src="" alt="Building Image" />
+
+  <!-- Speed slider controls -->
+  <div>
+    <label for="speedRange" class="range-label">Animation Speed (ms):</label>
+    <input 
+      type="range" 
+      id="speedRange" 
+      min="200" 
+      max="3000" 
+      step="200" 
+      value="1000"
+    />
+    <span id="speedValue">1000</span> ms
+  </div>
+
+  <script>
+    // 1. Array of building images (from Unsplash). Replace with your own if desired.
+    const images = [
+      
+      "https://images.pexels.com/photos/302769/pexels-photo-302769.jpeg?cs=srgb&dl=pexels-pixabay-302769.jpg&fm=jpg",
+      "https://img.freepik.com/free-photo/observation-urban-building-business-steel_1127-2397.jpg",
+      "https://t3.ftcdn.net/jpg/00/83/92/82/360_F_83928200_mYGZqB0ozTtSS6J5EtW9834mjb5tLW6x.jpg",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpT_gCNvTnzf5QB71i2szH0op8-1XurdhNDA&s",
+       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtUWJB1kkV29iK4rSKdW05hk6hvOqpA-z5Aw&s",
+    ];
+
+    // 2. Current index to track which image is shown
+    let currentIndex = 0;
+
+    // 3. References to DOM elements
+    const imageElement = document.getElementById("building-img");
+    const speedRange = document.getElementById("speedRange");
+    const speedValue = document.getElementById("speedValue");
+
+    // 4. Set the default image
+    imageElement.src = images[currentIndex];
+
+    // 5. Interval ID so we can clearInterval when we change speed
+    let intervalId = null;
+
+    // 6. Start the slideshow
+    function startSlideshow(speed) {
+      // Clear any existing interval before starting a new one
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+
+      intervalId = setInterval(() => {
+        // Go to next image index, looping back to 0 if we exceed
+        currentIndex = (currentIndex + 1) % images.length;
+        imageElement.src = images[currentIndex];
+      }, speed);
+    }
+
+    // 7. Update speed whenever the range slider changes
+    speedRange.addEventListener("input", () => {
+      const newSpeed = parseInt(speedRange.value, 10);
+      speedValue.textContent = newSpeed;
+      startSlideshow(newSpeed);
+    });
+
+    // 8. Begin the slideshow using the initial speed from the slider
+    startSlideshow(parseInt(speedRange.value, 10));
+  </script>
+</body>
+</html>
